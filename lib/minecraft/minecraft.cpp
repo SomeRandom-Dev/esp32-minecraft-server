@@ -1,6 +1,8 @@
 #include "minecraft.h"
 #include <chunk.h>
 
+#DEFINE DONT_USE_SERIAL
+
 // PACKET
 void packet::write(uint8_t val){
     buffer[index] = val;
@@ -37,7 +39,7 @@ uint8_t minecraft::player::readHandShake(){
     int protocol_version = readVarInt();
     readString(); // we don't need our name
     readUnsignedShort();
-    int state = readVarInt();
+    //int state = readVarInt(); // XD
     /* if(id != 0){
         return false;
     } else if(protocol_version != 754){
@@ -46,11 +48,13 @@ uint8_t minecraft::player::readHandShake(){
     } */
     // lol, just take a gamble ezpz
 
-    if(state != 1 && state != 2) {
+    /*if(state != 1 && state != 2) {
         return 0;
     } else {
         return state;
-    }
+    }*/
+    // lol i dont care i really dont care
+    
 }
 
 bool minecraft::player::readLoginStart(){
@@ -1087,19 +1091,27 @@ void minecraft::player::handle(){
 }
 // UTILITIES
 void minecraft::player::loginfo(String msg){
+    #IFNDEF DONT_USE_SERIAL
     Serial.println( "[INFO] p" + String(id) + " " + msg);
+    #ENDIF
 }
 
 void minecraft::player::logerr(String msg){
+    #IFNDEF DONT_USE_SERIAL
     Serial.println( "[ERROR] p" + String(id) + " " + msg);
+    #ENDIF
 }
 
 void minecraft::player::login(String msg){
+    #IFNDEF DONT_USE_SERIAL
     Serial.println( "[INFO] p" + String(id) + " <- " + msg);
+    #ENDIF
 }
 
 void minecraft::player::logout(String msg){
+    #IFNDEF DONT_USE_SERIAL
     Serial.println( "[INFO] p" + String(id) + " -> " + msg);
+    #ENDIF
 }
 
 uint8_t minecraft::player::findFreeInvSlot(uint16_t itemID){
